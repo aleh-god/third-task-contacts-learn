@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.TaskApp.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">@dimen/btn_width</item>
+        <item name="android:layout_margin">@dimen/main_margin</item>
+        <item name="android:padding">@dimen/main_padding</item>
+    </style>
+</resources>

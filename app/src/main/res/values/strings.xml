@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Third task</string>
+    <string name="btn_text_select">Select contact</string>
+    <string name="btn_text_show">Show contacts</string>
+    <string name="btn_text_sp">Show from SP</string>
+    <string name="btn_text_not">Show in Notification</string>
 </resources>
