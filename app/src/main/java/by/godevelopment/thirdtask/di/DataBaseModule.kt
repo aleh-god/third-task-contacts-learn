@@ -6,13 +6,13 @@ import by.godevelopment.thirdtask.data.database.ContactsDao
 import by.godevelopment.thirdtask.data.database.ContactsDataBase
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
+//import dagger.hilt.InstallIn
+//import dagger.hilt.android.qualifiers.ApplicationContext
+//import dagger.hilt.components.SingletonComponent
 import javax.inject.Provider
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
+//@InstallIn(SingletonComponent::class)
 @Module
 object DataBaseModule {
 
@@ -24,12 +24,13 @@ object DataBaseModule {
     @Provides
     @Singleton
     fun provideContactsDatabase(
-        @ApplicationContext appContext: Context,
+//        @ApplicationContext
+        context: Context,
         providerContacts: Provider<ContactsDao>
     ): ContactsDataBase {
         return Room
             .databaseBuilder(
-                appContext,
+                context,
                 ContactsDataBase::class.java,
                 "contacts_database.db"
             )

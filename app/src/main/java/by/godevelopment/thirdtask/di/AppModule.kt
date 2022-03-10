@@ -4,13 +4,13 @@ import by.godevelopment.thirdtask.data.ContactsRepositoryImp
 import by.godevelopment.thirdtask.data.database.ContactsDao
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+//import dagger.hilt.InstallIn
+//import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
-@Module
+//@InstallIn(SingletonComponent::class)
+@Module(includes = [DataBaseModule::class, BindsModule::class, ViewModelModule::class])
 object AppModule {
     @Provides
     @Singleton

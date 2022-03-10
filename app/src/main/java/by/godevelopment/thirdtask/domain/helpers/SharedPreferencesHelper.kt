@@ -4,13 +4,14 @@ import android.content.Context
 import android.util.Log
 import androidx.core.content.edit
 import by.godevelopment.thirdtask.common.TAG
-import dagger.hilt.android.qualifiers.ApplicationContext
+//import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class SharedPreferencesHelper @Inject constructor(
-    @ApplicationContext appContext: Context
+//    @ApplicationContext
+    context: Context
 ) {
-    private val sharedPreferences = appContext.getSharedPreferences(
+    private val sharedPreferences = context.getSharedPreferences(
         PREFERENCE_NAME,
         Context.MODE_PRIVATE
     )

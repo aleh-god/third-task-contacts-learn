@@ -8,12 +8,12 @@ import by.godevelopment.thirdtask.data.entities.ContactEntity
 import by.godevelopment.thirdtask.domain.models.ContactModel
 import by.godevelopment.thirdtask.domain.usecase.GetAllContactsUseCase
 import by.godevelopment.thirdtask.domain.usecase.InsertContactUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+//import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
+//@HiltViewModel
 class MainViewModel @Inject constructor(
     private val getAllContactsUseCase: GetAllContactsUseCase,
     private val insertContactUseCase: InsertContactUseCase
