@@ -16,7 +16,6 @@
         android:gravity="center"
         android:padding="@dimen/main_padding"
         android:layout_margin="@dimen/main_padding"
-        android:background="@color/orange_white"
         android:layout_marginHorizontal="@dimen/main_margin"
         style="@style/TextAppearance.MaterialComponents.Body1"
         />
@@ -29,7 +28,6 @@
         android:gravity="center"
         android:padding="@dimen/main_padding"
         android:layout_margin="@dimen/main_padding"
-        android:background="@color/orange_white"
         android:layout_marginHorizontal="@dimen/main_margin"
         style="@style/TextAppearance.MaterialComponents.Body1"
         />
@@ -43,7 +41,6 @@
         android:padding="@dimen/main_padding"
         android:layout_margin="@dimen/main_padding"
         android:layout_marginHorizontal="@dimen/main_margin"
-        android:background="@color/orange_white"
         style="@style/TextAppearance.MaterialComponents.Body1"
         />
 
@@ -56,7 +53,6 @@
         android:padding="@dimen/main_padding"
         android:layout_margin="@dimen/main_padding"
         android:layout_marginHorizontal="@dimen/main_margin"
-        android:background="@color/orange_white"
         style="@style/TextAppearance.MaterialComponents.Body1"
         />
 

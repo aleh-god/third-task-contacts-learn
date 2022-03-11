@@ -1,15 +1,19 @@
-package by.godevelopment.thirdtask.presentation.main
+package by.godevelopment.thirdtask.presentation.list
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.godevelopment.thirdtask.common.TAG
+import by.godevelopment.thirdtask.domain.helpers.ContactsContractHelper
 import by.godevelopment.thirdtask.domain.models.ContactModel
-import by.godevelopment.thirdtask.domain.usecase.GetAllEntityAndConvertToModelUseCase
+import by.godevelopment.thirdtask.domain.usecase.InsertContactUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(
-    private val getAllEntityAndConvertToModelUseCase: GetAllEntityAndConvertToModelUseCase
+class ListViewModel @Inject constructor(
+    private val contractHelper: ContactsContractHelper,
+    private val insertContactUseCase: InsertContactUseCase
 ): ViewModel() {
     private val _stateUI = MutableStateFlow(StateUI())
     val stateUI: StateFlow<StateUI> = _stateUI
@@ -18,13 +22,14 @@ class MainViewModel @Inject constructor(
     val eventUI: SharedFlow<EventUI> = _eventUI
 
     init {
+        Log.i(TAG, "ListViewModel: init")
         viewModelScope.launch {
-            getAllContactModel()
+            populateUiState()
         }
     }
 
-    private suspend fun getAllContactModel() {
-        getAllEntityAndConvertToModelUseCase()
+    private suspend fun populateUiState() {
+        contractHelper.getTestList()
             .onStart {
                 _stateUI.value = StateUI(
                     isFetchingData = true
@@ -46,6 +51,21 @@ class MainViewModel @Inject constructor(
                     contacts = it
                 )
             }
+    }
+
+    fun saveContactModel(contactModel: ContactModel) {
+        viewModelScope.launch {
+            val logResult = insertContactUseCase(contactModel)
+            if (logResult) {
+                _eventUI.emit(EventUI(
+                    "Contact saved successful."
+                ))
+            } else {
+                _eventUI.emit(EventUI(
+                    "Contact don't saved."
+                ))
+            }
+        }
     }
 
     data class StateUI(

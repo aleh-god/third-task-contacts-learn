@@ -8,7 +8,6 @@ import by.godevelopment.thirdtask.common.TAG
 import javax.inject.Inject
 
 class SharedPreferencesHelper @Inject constructor(
-//    @ApplicationContext
     context: Context
 ) {
     private val sharedPreferences = context.getSharedPreferences(

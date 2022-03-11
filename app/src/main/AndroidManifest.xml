@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="by.godevelopment.thirdtask">
 
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".TaskApp"
         android:allowBackup="true"

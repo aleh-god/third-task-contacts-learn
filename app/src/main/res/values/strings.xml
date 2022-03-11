@@ -4,4 +4,7 @@
     <string name="btn_text_show">Show contacts</string>
     <string name="btn_text_sp">Show from SP</string>
     <string name="btn_text_not">Show in Notification</string>
+    <string name="btn_text_save_contact">Save contact</string>
+    <string name="toolbar_text_back">Back to main</string>
+    <string name="toolbar_text_save">Save contact</string>
 </resources>

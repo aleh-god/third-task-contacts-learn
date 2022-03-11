@@ -61,9 +61,8 @@ dependencies {
     def fragment_version = "1.4.1"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
-//    def hilt_version = "2.40.5"
-//    implementation "com.google.dagger:hilt-android:$hilt_version"
-//    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
 
     def dagger_version = "2.40.5"
     implementation "com.google.dagger:dagger:$dagger_version"

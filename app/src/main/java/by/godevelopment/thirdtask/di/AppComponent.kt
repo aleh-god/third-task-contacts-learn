@@ -2,6 +2,7 @@ package by.godevelopment.thirdtask.di
 
 import android.content.Context
 import by.godevelopment.thirdtask.MainActivity
+import by.godevelopment.thirdtask.presentation.list.ListFragment
 import by.godevelopment.thirdtask.presentation.main.MainFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -22,4 +23,5 @@ interface AppComponent {
 
     fun inject(mainActivity: MainActivity)
     fun inject(mainFragment: MainFragment)
+    fun inject(mainFragment: ListFragment)
 }
