@@ -61,6 +61,7 @@ class MainFragment : Fragment() {
         binding.btnSelect.setOnClickListener {
             navigateToList()
         }
+
         binding.btnShow.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                 viewModel.getArrayFlow().collect {
@@ -69,6 +70,16 @@ class MainFragment : Fragment() {
             }
         }
         setupListDialogFragmentListener()
+
+        binding.btnPreference.setOnClickListener {
+            with(binding) {
+                name.visibility = View.GONE
+                surname.visibility = View.GONE
+                email.visibility = View.GONE
+                number.text = viewModel.getNumberFromSP()
+                number.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun setupListDialogFragmentListener() {

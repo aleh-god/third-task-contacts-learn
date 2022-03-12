@@ -15,18 +15,18 @@ class SharedPreferencesHelper @Inject constructor(
         Context.MODE_PRIVATE
     )
 
-    fun setCurrentLanguage(numberPhoneTask: String) {
+    fun setCurrentPhoneNumber(numberPhoneTask: String) {
         sharedPreferences.edit {
             Log.i(TAG, "SharedPreferencesHelper: $numberPhoneTask")
             putString(PREF_KEY, numberPhoneTask)
         }
     }
 
-    fun getCurrentLanguage(): String = sharedPreferences.getString(PREF_KEY, START_KEY) ?: START_KEY
+    fun getCurrentPhoneNumber(): String = sharedPreferences.getString(PREF_KEY, START_KEY) ?: START_KEY
 
     companion object {
         private const val PREFERENCE_NAME = "task_pref"
         private const val PREF_KEY = "current_phoneNumber"
-        const val START_KEY = ""
+        const val START_KEY = "null"
     }
 }

@@ -63,9 +63,8 @@ class ListAdapter(
             } else {
                 root.setBackgroundColor(colorMain)
             }
-            root.setOnLongClickListener {
+            root.setOnClickListener {
                 changeSelectedItem(item.id)
-                true
             }
         }
     }
