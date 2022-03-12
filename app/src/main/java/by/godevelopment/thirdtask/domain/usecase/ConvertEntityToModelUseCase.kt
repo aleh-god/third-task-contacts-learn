@@ -7,13 +7,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class GetAllEntityAndConvertToModelUseCase @Inject constructor(
+class ConvertEntityToModelUseCase @Inject constructor(
     private val contactsRepository: ContactsRepository
 ) {
     operator fun invoke(): Flow<List<ContactModel>>
     = contactsRepository.getAllContacts()
-        .map {
-            it.map {
+        .map { list ->
+            list.map {
                 convertFromEntityToModel(it)
             }
         }

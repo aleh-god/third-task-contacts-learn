@@ -7,4 +7,7 @@
     <string name="btn_text_save_contact">Save contact</string>
     <string name="toolbar_text_back">Back to main</string>
     <string name="toolbar_text_save">Save contact</string>
+    <string name="contact_choice">Contact choice</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_ignore">Ignore</string>
 </resources>

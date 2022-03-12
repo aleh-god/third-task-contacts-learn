@@ -1,57 +1,34 @@
 package by.godevelopment.thirdtask.presentation.main
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import by.godevelopment.thirdtask.domain.models.ContactModel
-import by.godevelopment.thirdtask.domain.usecase.GetAllEntityAndConvertToModelUseCase
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import by.godevelopment.thirdtask.common.TAG
+import by.godevelopment.thirdtask.data.entities.ContactEntity
+import by.godevelopment.thirdtask.domain.usecase.ConvertEntityToArrayListUseCase
+import by.godevelopment.thirdtask.domain.usecase.GetContactEntityByIndexUseCase
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-    private val getAllEntityAndConvertToModelUseCase: GetAllEntityAndConvertToModelUseCase
+    private val convertEntityToArrayListUseCase: ConvertEntityToArrayListUseCase,
+    private val getContactEntityByIndexUseCase: GetContactEntityByIndexUseCase
 ): ViewModel() {
-    private val _stateUI = MutableStateFlow(StateUI())
-    val stateUI: StateFlow<StateUI> = _stateUI
-
     private val _eventUI = MutableSharedFlow<EventUI>(0)
     val eventUI: SharedFlow<EventUI> = _eventUI
 
-    init {
-        viewModelScope.launch {
-            getAllContactModel()
-        }
-    }
+    fun getArrayFlow(): Flow<ArrayList<String>> =
+        convertEntityToArrayListUseCase()
 
-    private suspend fun getAllContactModel() {
-        getAllEntityAndConvertToModelUseCase()
-            .onStart {
-                _stateUI.value = StateUI(
-                    isFetchingData = true
-                )
-            }
-            .catch { exception ->
-                _stateUI.value = StateUI(
-                    isFetchingData = false
-                )
-                _eventUI.emit(
-                    EventUI(
-                        exception.message ?: "Unknown error"
-                    )
-                )
-            }
-            .collect {
-                _stateUI.value = StateUI(
-                    isFetchingData = false,
-                    contacts = it
-                )
-            }
-    }
+    fun getContactByIndexFlow(index: Int): Flow<ContactEntity>
+        = getContactEntityByIndexUseCase(index)
 
-    data class StateUI(
-        val isFetchingData: Boolean = false,
-        val contacts: List<ContactModel> = listOf()
-    )
+
+    fun saveContactByIndexInSharedPref(contact: ContactEntity) {
+        Log.i(TAG, "saveContactByIndexInSharedPref: $contact")
+
+    }
 
     data class EventUI(
         val message: String

@@ -2,6 +2,7 @@ package by.godevelopment.thirdtask.presentation.main
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import by.godevelopment.thirdtask.R
 import by.godevelopment.thirdtask.appComponent
+import by.godevelopment.thirdtask.common.TAG
+import by.godevelopment.thirdtask.data.entities.ContactEntity
 import by.godevelopment.thirdtask.databinding.FragmentMainBinding
 import by.godevelopment.thirdtask.di.factory.ViewModelFactory
+import by.godevelopment.thirdtask.presentation.dialogFragments.ListDialogFragment
 import by.godevelopment.thirdtask.presentation.list.ListFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
@@ -57,6 +61,21 @@ class MainFragment : Fragment() {
         binding.btnSelect.setOnClickListener {
             navigateToList()
         }
+        binding.btnShow.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                viewModel.getArrayFlow().collect {
+                    ListDialogFragment.show(parentFragmentManager, it)
+                }
+            }
+        }
+        setupListDialogFragmentListener()
+    }
+
+    private fun setupListDialogFragmentListener() {
+        ListDialogFragment.setupListener(parentFragmentManager, this) { result ->
+            doProcessContactByIndex(result)
+            Log.i(TAG, "setupListDialogFragmentListener: it = $result")
+        }
     }
 
     private fun setupEvent() {
@@ -70,6 +89,31 @@ class MainFragment : Fragment() {
                     )
                     .show()
             }
+        }
+    }
+
+    private fun doProcessContactByIndex(index: Int) {
+        lifecycleScope.launchWhenStarted {
+            viewModel.getContactByIndexFlow(index).collect { contact ->
+                viewModel.saveContactByIndexInSharedPref(contact)
+                showContactOnScreen(contact)
+            }
+        }
+    }
+
+    private fun showContactOnScreen(contact: ContactEntity) {
+        with(binding) {
+            name.text = contact.name
+            name.visibility = View.VISIBLE
+
+            surname.text = contact.surname
+            surname.visibility = View.VISIBLE
+
+            number.text = contact.taskPhoneNumber
+            number.visibility = View.VISIBLE
+
+            email.text = contact.email
+            email.visibility = View.VISIBLE
         }
     }
 
