@@ -10,4 +10,11 @@
     <string name="contact_choice">Contact choice</string>
     <string name="action_confirm">Confirm</string>
     <string name="action_ignore">Ignore</string>
+    <string name="notif_text_title">Saved phone number</string>
+    <string name="channel_name">Third task channel</string>
+    <string name="channel_description">Main channel for view phone number</string>
+    <string name="fragment_view_text_main">Contact from SP</string>
+    <string name="fragment_main_text_save">Save number in SP</string>
+    <string name="alert_text_error_unknown">Unknown error</string>
+    <string name="fragment_main_notif_message">Notification started</string>
 </resources>

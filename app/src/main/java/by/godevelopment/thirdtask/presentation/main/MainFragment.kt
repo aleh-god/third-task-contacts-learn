@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import by.godevelopment.thirdtask.R
 import by.godevelopment.thirdtask.appComponent
+import by.godevelopment.thirdtask.common.CHANNEL_ID
 import by.godevelopment.thirdtask.common.TAG
 import by.godevelopment.thirdtask.data.entities.ContactEntity
 import by.godevelopment.thirdtask.databinding.FragmentMainBinding
@@ -54,7 +56,7 @@ class MainFragment : Fragment() {
     }
 
     private fun setupUI() {
-
+        showSharedPreferenceInfo()
     }
 
     private fun setupListeners() {
@@ -71,21 +73,31 @@ class MainFragment : Fragment() {
         }
         setupListDialogFragmentListener()
 
-        binding.btnPreference.setOnClickListener {
-            with(binding) {
-                name.visibility = View.GONE
-                surname.visibility = View.GONE
-                email.visibility = View.GONE
-                number.text = viewModel.getNumberFromSP()
-                number.visibility = View.VISIBLE
-            }
+        binding.btnSharedPreference.setOnClickListener {
+            showSharedPreferenceInfo()
+            Snackbar.make(binding.root, viewModel.getNumberFromSP(), Snackbar.LENGTH_LONG).show()
+        }
+
+        binding.btnNotification.setOnClickListener {
+            viewModel.showNameAndSurnameByNumber()
+            Snackbar.make(binding.root, getString(R.string.fragment_main_notif_message), Snackbar.LENGTH_LONG).show()
+        }
+    }
+
+    private fun showSharedPreferenceInfo() {
+        with(binding) {
+            name.text = getString(R.string.fragment_view_text_main)
+            name.visibility = View.VISIBLE
+            surname.visibility = View.GONE
+            email.visibility = View.GONE
+            number.text = viewModel.getNumberFromSP()
+            number.visibility = View.VISIBLE
         }
     }
 
     private fun setupListDialogFragmentListener() {
         ListDialogFragment.setupListener(parentFragmentManager, this) { result ->
             doProcessContactByIndex(result)
-            Log.i(TAG, "setupListDialogFragmentListener: it = $result")
         }
     }
 
@@ -108,6 +120,7 @@ class MainFragment : Fragment() {
             viewModel.getContactByIndexFlow(index).collect { contact ->
                 viewModel.saveContactByIndexInSharedPref(contact)
                 showContactOnScreen(contact)
+                Snackbar.make(binding.root, getString(R.string.fragment_main_text_save), Snackbar.LENGTH_LONG).show()
             }
         }
     }

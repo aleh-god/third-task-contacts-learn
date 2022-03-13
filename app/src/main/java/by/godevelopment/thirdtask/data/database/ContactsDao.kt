@@ -12,6 +12,9 @@ interface ContactsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertContact(contact: ContactEntity): Long
 
+    @Query("SELECT * FROM contacts_table WHERE phone_number = :key")
+    suspend fun getContactByNumber(key: String): ContactEntity
+
     @Query("SELECT * FROM contacts_table")
     fun getAllContacts(): Flow<List<ContactEntity>>
 

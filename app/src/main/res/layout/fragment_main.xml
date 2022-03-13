@@ -29,7 +29,7 @@
             />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_preference"
+            android:id="@+id/btn_shared_preference"
             style="@style/Widget.ThirdTask.Button"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

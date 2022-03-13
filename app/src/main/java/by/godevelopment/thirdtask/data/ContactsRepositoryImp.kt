@@ -17,6 +17,9 @@ class ContactsRepositoryImp @Inject constructor(
         return logInsert > -1
     }
 
+    override suspend fun getContactByNumber(number: String): ContactEntity =
+        contactsDao.getContactByNumber(number)
+
     override fun getAllContacts(): Flow<List<ContactEntity>> =
         contactsDao.getAllContacts()
 

@@ -6,5 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface ContactsRepository {
     suspend fun insertContact(contactModel: ContactModel): Boolean
+    suspend fun getContactByNumber(number: String): ContactEntity
     fun getAllContacts(): Flow<List<ContactEntity>>
 }
