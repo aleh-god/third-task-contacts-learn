@@ -1,6 +1,7 @@
 package by.godevelopment.thirdtask.presentation.main
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -8,8 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -18,7 +19,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import by.godevelopment.thirdtask.R
 import by.godevelopment.thirdtask.appComponent
-import by.godevelopment.thirdtask.common.CHANNEL_ID
 import by.godevelopment.thirdtask.common.TAG
 import by.godevelopment.thirdtask.data.entities.ContactEntity
 import by.godevelopment.thirdtask.databinding.FragmentMainBinding
@@ -42,6 +42,8 @@ class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding !!
 
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
         super.onAttach(context)
@@ -53,6 +55,20 @@ class MainFragment : Fragment() {
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this, viewModelFactor)[MainViewModel::class.java]
+        requestPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+                if (isGranted) {
+                    navigateToList()
+                } else {
+                    Snackbar
+                        .make(
+                            binding.root,
+                            getString(R.string.fragment_list_alert_perm_denied),
+                            Snackbar.LENGTH_LONG
+                        )
+                        .show()
+                }
+            }
         setupUI()
         setupListeners()
         setupEvent()
@@ -147,42 +163,53 @@ class MainFragment : Fragment() {
     }
 
     private fun checkPermission() {
-        Log.i(TAG, "checkPermission: start")
-        // CHECK Condition
-        activity?.let { activity ->
-            val check = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
-            if(check != PackageManager.PERMISSION_GRANTED) {
-                Log.i(TAG, "checkPermission:  Request permission")
-                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_CONTACTS), 100)
-                navigateToList()
-            } else {
-                Log.i(TAG, "checkPermission: navigateToList()")
-                navigateToList()
+        val permission =  ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
+        when {
+            permission == PackageManager.PERMISSION_GRANTED -> setupUI()
+            shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS) -> {
+                Log.i(ContentValues.TAG, "checkPermission: shouldShowRequestPermissionRationale")
+                requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
             }
+            else -> requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 100 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "onRequestPermissionsResult: navigateToList()")
-            navigateToList()
-        } else {
-            Log.i(TAG, "onRequestPermissionsResult: checkPermission()")
-            Snackbar
-                .make(
-                    binding.root,
-                    getString(R.string.fragment_list_alert_perm_denied),
-                    Snackbar.LENGTH_LONG
-                )
-                .show()
-            checkPermission()
-        }
-    }
+//    private fun checkPermission() {
+//        Log.i(TAG, "checkPermission: start")
+//        // CHECK Condition
+//        activity?.let { activity ->
+//            val check = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
+//            if(check != PackageManager.PERMISSION_GRANTED) {
+//                Log.i(TAG, "checkPermission:  Request permission")
+//                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_CONTACTS), 100)
+//            } else {
+//                Log.i(TAG, "checkPermission: navigateToList()")
+//                navigateToList()
+//            }
+//        }
+//    }
+
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        if (requestCode == 100 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//            Log.i(TAG, "onRequestPermissionsResult: navigateToList()")
+//            navigateToList()
+//        } else {
+//            Log.i(TAG, "onRequestPermissionsResult: checkPermission()")
+//            Snackbar
+//                .make(
+//                    binding.root,
+//                    getString(R.string.fragment_list_alert_perm_denied),
+//                    Snackbar.LENGTH_LONG
+//                )
+//                .show()
+//            checkPermission()
+//        }
+//    }
 
     private fun navigateToList() {
         Log.i(TAG, "navigateToList: ")
