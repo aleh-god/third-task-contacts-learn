@@ -17,4 +17,7 @@
     <string name="fragment_main_text_save">Save number in SP</string>
     <string name="alert_text_error_unknown">Unknown error</string>
     <string name="fragment_main_notif_message">Notification started</string>
+    <string name="fragment_list_message_good">Contact saved successful.</string>
+    <string name="fragment_list_message_bad">Contact don\'t saved.</string>
+    <string name="fragment_list_alert_perm_denied">Permission denied</string>
 </resources>

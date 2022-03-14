@@ -9,10 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
+        style="@style/ListLayout"
         >
-
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -26,7 +24,6 @@
             android:layout_height="wrap_content"
             tools:listitem="@layout/item_contact"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_weight="9"
             />
 
         <com.google.android.material.button.MaterialButton
@@ -34,7 +31,6 @@
             style="@style/Widget.ThirdTask.Button"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:text="@string/btn_text_save_contact"
             />
 

@@ -7,6 +7,17 @@
         <item name="colorControlNormal">?attr/colorOnPrimary</item>
     </style>
 
+    <style name="ListLayout">
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">top</item>
+    </style>
+
+    <style name="ListItemLayout">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">?attr/colorSecondary</item>
+    </style>
+
     <style name="Widget.ThirdTask.Button" parent="Widget.MaterialComponents.Button">
         <item name="android:layout_width">@dimen/btn_width</item>
         <item name="android:layout_margin">@dimen/main_margin</item>
@@ -18,6 +29,11 @@
         <item name="android:background">?attr/colorSecondary</item>
         <item name="android:padding">@dimen/main_padding</item>
         <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="Widget.ThirdTask.ItemTextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:padding">@dimen/main_padding</item>
+        <item name="android:layout_margin">@dimen/main_padding</item>
     </style>
 
 </resources>
