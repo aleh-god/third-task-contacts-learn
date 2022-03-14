@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.thirdtask.R
-import by.godevelopment.thirdtask.common.INIT_BOOLEAN_PERMISSION
 import by.godevelopment.thirdtask.common.TAG
 import by.godevelopment.thirdtask.domain.helpers.ContactsContractHelper
 import by.godevelopment.thirdtask.domain.helpers.StringHelper
@@ -47,8 +46,7 @@ class ListViewModel @Inject constructor(
                     delay(1000)
                     _eventUI.emit(
                         EventUI(
-                            exception.message
-                                ?: stringHelper.getString(R.string.alert_text_error_unknown)
+                            stringHelper.getString(R.string.alert_list_contact_not_loaded)
                         )
                     )
                 }
@@ -67,11 +65,11 @@ class ListViewModel @Inject constructor(
             val logResult = insertContactUseCase(contactModel)
             if (logResult) {
                 _eventUI.emit(EventUI(
-                    stringHelper.getString(R.string.fragment_list_message_good)
+                    stringHelper.getString(R.string.alert_list_contact_good)
                 ))
             } else {
                 _eventUI.emit(EventUI(
-                    stringHelper.getString(R.string.fragment_list_message_bad)
+                    stringHelper.getString(R.string.alert_list_contact_bad)
                 ))
             }
         }

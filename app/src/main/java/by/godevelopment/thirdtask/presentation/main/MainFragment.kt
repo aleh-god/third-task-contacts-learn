@@ -63,21 +63,21 @@ class MainFragment : Fragment() {
                     Snackbar
                         .make(
                             binding.root,
-                            getString(R.string.fragment_list_alert_perm_denied),
+                            getString(R.string.alert_main_perm_denied),
                             Snackbar.LENGTH_LONG
                         )
                         .show()
                 }
             }
-        setupUI()
+//        setupUI()
         setupListeners()
         setupEvent()
         return binding.root
     }
 
-    private fun setupUI() {
-        showSharedPreferenceInfo()
-    }
+//    private fun setupUI() {
+//        showSharedPreferenceInfo()
+//    }
 
     private fun setupListeners() {
         binding.btnSelect.setOnClickListener {
@@ -96,18 +96,16 @@ class MainFragment : Fragment() {
 
         binding.btnSharedPreference.setOnClickListener {
             showSharedPreferenceInfo()
-            Snackbar.make(binding.root, viewModel.getNumberFromSP(), Snackbar.LENGTH_LONG).show()
         }
 
         binding.btnNotification.setOnClickListener {
             viewModel.showNameAndSurnameByNumber()
-            Snackbar.make(binding.root, getString(R.string.fragment_main_notif_message), Snackbar.LENGTH_LONG).show()
         }
     }
 
     private fun showSharedPreferenceInfo() {
         with(binding) {
-            name.text = getString(R.string.fragment_view_text_main)
+            name.text = getString(R.string.fragment_main_text_view)
             name.visibility = View.VISIBLE
             surname.visibility = View.GONE
             email.visibility = View.GONE
@@ -165,13 +163,13 @@ class MainFragment : Fragment() {
     private fun checkPermission() {
         val permission =  ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
         when {
-            permission == PackageManager.PERMISSION_GRANTED -> setupUI()
+            permission == PackageManager.PERMISSION_GRANTED -> navigateToList()
             shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS) -> {
                 Log.i(ContentValues.TAG, "checkPermission: shouldShowRequestPermissionRationale")
                 Snackbar
                     .make(
                         binding.root,
-                        getString(R.string.fragment_list_alert_perm_denied),
+                        getString(R.string.alert_main_perm_denied),
                         Snackbar.LENGTH_LONG
                     )
                     .show()

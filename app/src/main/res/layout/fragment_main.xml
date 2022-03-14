@@ -16,7 +16,6 @@
             android:id="@+id/btn_select"
             style="@style/Widget.ThirdTask.Button"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:text="@string/btn_text_select"
             />
 
@@ -24,7 +23,6 @@
             android:id="@+id/btn_show"
             style="@style/Widget.ThirdTask.Button"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:text="@string/btn_text_show"
             />
 
@@ -32,7 +30,6 @@
             android:id="@+id/btn_shared_preference"
             style="@style/Widget.ThirdTask.Button"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:text="@string/btn_text_sp"
             />
 
@@ -40,7 +37,6 @@
             android:id="@+id/btn_notification"
             style="@style/Widget.ThirdTask.Button"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:text="@string/btn_text_not"
             />
 

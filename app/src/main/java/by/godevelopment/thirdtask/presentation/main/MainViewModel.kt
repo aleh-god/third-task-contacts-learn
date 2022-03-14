@@ -3,6 +3,7 @@ package by.godevelopment.thirdtask.presentation.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.thirdtask.R
+import by.godevelopment.thirdtask.common.START_KEY
 import by.godevelopment.thirdtask.data.entities.ContactEntity
 import by.godevelopment.thirdtask.domain.helpers.NotificationHelper
 import by.godevelopment.thirdtask.domain.helpers.SharedPreferencesHelper
@@ -39,19 +40,19 @@ class MainViewModel @Inject constructor(
     }
 
     fun getNumberFromSP(): String {
-        return sharedPreferencesHelper.getCurrentPhoneNumber()
+        val key = sharedPreferencesHelper.getCurrentPhoneNumber()
+        return if (key != START_KEY) key
+        else stringHelper.getString(R.string.alert_sp_error)
     }
 
     fun showNameAndSurnameByNumber() {
         viewModelScope.launch {
-            try {
-                val key = sharedPreferencesHelper.getCurrentPhoneNumber()
+            val key = sharedPreferencesHelper.getCurrentPhoneNumber()
+            if (key != START_KEY) {
                 notificationHelper.createNotification(getNameAndSurnameByNumberUseCase(key))
-            } catch (e: Exception) {
-                _eventUI.emit(
-                    EventUI(e.message ?: stringHelper.getString(R.string.alert_text_error_unknown))
-                )
+                _eventUI.emit(EventUI(stringHelper.getString(R.string.alert_main_notif_started)))
             }
+            else _eventUI.emit(EventUI(stringHelper.getString(R.string.alert_sp_error)))
         }
     }
 

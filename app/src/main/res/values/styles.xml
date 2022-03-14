@@ -22,6 +22,7 @@
         <item name="android:layout_width">@dimen/btn_width</item>
         <item name="android:layout_margin">@dimen/main_margin</item>
         <item name="android:padding">@dimen/main_padding</item>
+        <item name="android:layout_gravity">center</item>
     </style>
 
     <style name="Widget.ThirdTask.TextView" parent="Widget.MaterialComponents.TextView">

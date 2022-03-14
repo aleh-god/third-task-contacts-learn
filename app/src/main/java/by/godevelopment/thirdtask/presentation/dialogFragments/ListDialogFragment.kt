@@ -21,8 +21,8 @@ class ListDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(requireContext())
-            .setTitle(R.string.contact_choice)
-            .setNeutralButton(R.string.action_ignore, null)
+            .setTitle(R.string.dialog_contact_choice)
+            .setNeutralButton(R.string.dialog_action_ignore, null)
             .setItems(list, DialogInterface.OnClickListener { _, which ->
                 val item = list[which]
                 Log.i(TAG, "onCreateDialog: which = $which, item = $item")
