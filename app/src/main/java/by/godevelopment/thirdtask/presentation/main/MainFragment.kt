@@ -168,48 +168,18 @@ class MainFragment : Fragment() {
             permission == PackageManager.PERMISSION_GRANTED -> setupUI()
             shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS) -> {
                 Log.i(ContentValues.TAG, "checkPermission: shouldShowRequestPermissionRationale")
+                Snackbar
+                    .make(
+                        binding.root,
+                        getString(R.string.fragment_list_alert_perm_denied),
+                        Snackbar.LENGTH_LONG
+                    )
+                    .show()
                 requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
             }
             else -> requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
         }
     }
-
-//    private fun checkPermission() {
-//        Log.i(TAG, "checkPermission: start")
-//        // CHECK Condition
-//        activity?.let { activity ->
-//            val check = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
-//            if(check != PackageManager.PERMISSION_GRANTED) {
-//                Log.i(TAG, "checkPermission:  Request permission")
-//                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_CONTACTS), 100)
-//            } else {
-//                Log.i(TAG, "checkPermission: navigateToList()")
-//                navigateToList()
-//            }
-//        }
-//    }
-
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<out String>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if (requestCode == 100 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//            Log.i(TAG, "onRequestPermissionsResult: navigateToList()")
-//            navigateToList()
-//        } else {
-//            Log.i(TAG, "onRequestPermissionsResult: checkPermission()")
-//            Snackbar
-//                .make(
-//                    binding.root,
-//                    getString(R.string.fragment_list_alert_perm_denied),
-//                    Snackbar.LENGTH_LONG
-//                )
-//                .show()
-//            checkPermission()
-//        }
-//    }
 
     private fun navigateToList() {
         Log.i(TAG, "navigateToList: ")

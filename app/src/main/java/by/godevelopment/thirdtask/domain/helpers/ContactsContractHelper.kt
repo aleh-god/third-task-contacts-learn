@@ -1,12 +1,11 @@
 package by.godevelopment.thirdtask.domain.helpers
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
 import android.provider.ContactsContract
-import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.util.Log
-import by.godevelopment.thirdtask.common.TAG
 import by.godevelopment.thirdtask.domain.models.ContactModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -16,25 +15,6 @@ import javax.inject.Inject
 class ContactsContractHelper @Inject constructor(
     private val context: Context
 ) {
-    init {
-        Log.i(TAG, "ContactsContractHelper: init")
-    }
-
-    fun getTestList(): Flow<List<ContactModel>> = flow {
-        val list = (0..10).map {
-            ContactModel(
-                id = it,
-                key = it.toString(),
-                name = "name $it",
-                taskPhoneNumber = "Number $it",
-                email = "email $it",
-                surname = "surname $it",
-                isSelected = false
-            )
-        }
-        emit(list)
-    }
-
     @SuppressLint("Range")
     fun getContactList(): Flow<List<ContactModel>> = flow {
         val idList = mutableListOf<String>()
@@ -60,13 +40,10 @@ class ContactsContractHelper @Inject constructor(
                 while (cursorName.moveToNext()) {
                     val id = cursorName.getString(cursorName.getColumnIndex(ContactsContract.Contacts._ID))
                     idList.add(id)
-                    Log.i(TAG, "ContactsContractHelper: id = $id")
+                    Log.i(ContentValues.TAG, "ContactsContractHelper: id = $id")
                     val key = cursorName.getString(cursorName.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY))
                     keyList.add(key)
-                    Log.i(TAG, "ContactsContractHelper: key = $key")
-                    val name = cursorName.getString(cursorName.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                    names.add(name)
-                    Log.i(TAG, "ContactsContractHelper: name = $name")
+                    Log.i(ContentValues.TAG, "ContactsContractHelper: key = $key")
 
                     val uriEmail =  ContactsContract.CommonDataKinds.Email.CONTENT_URI
                     val selectionEmailQuery = ContactsContract.CommonDataKinds.Email.CONTACT_ID + " =?"
@@ -84,7 +61,7 @@ class ContactsContractHelper @Inject constructor(
                                     ContactsContract.CommonDataKinds.Email.DATA
                                 ))
                                 emails.add(email)
-                                Log.i(TAG, "ContactsContractHelper: email = $email")
+                                Log.i(ContentValues.TAG, "ContactsContractHelper: email = $email")
                             }
                         }
                         cursorEmail.close()
@@ -105,50 +82,60 @@ class ContactsContractHelper @Inject constructor(
                                 val number = cursorPhone.getString(cursorPhone.getColumnIndex(
                                     ContactsContract.CommonDataKinds.Phone.NUMBER))
                                 numbers.add(number)
-                                Log.i(TAG, "ContactsContractHelper: number = $number")
+                                Log.i(ContentValues.TAG, "ContactsContractHelper: number = $number")
                             }
                         }
                         cursorPhone.close()
                     }
 
                     val uriFamilyName = ContactsContract.Data.CONTENT_URI
-                    val selectionFamilyNameQuery = ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID + " =?"
+                    val selectionFamilyNameQuery = ContactsContract.Data.MIMETYPE +
+                            " = ? AND " +
+                            ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID +
+                            " = ?"
                     val cursorFamilyNameOrNull = context.contentResolver.query(
                         uriFamilyName,
                         null,
                         selectionFamilyNameQuery,
-                        arrayOf<String>(id),
+                        arrayOf<String>(ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE, id),
                         null
                     )
                     cursorFamilyNameOrNull?.let { cursorFamilyName ->
-                        Log.i(TAG, "getContactList: cursorFamilyName = ${cursorFamilyName.count}")
-//                        if (cursorFamilyName.count > 0) {
-//                            while (cursorFamilyName.moveToNext()) {
-//                                val familyName = cursorFamilyName.getString(cursorFamilyName.getColumnIndex(
-//                                    ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME))
-//                                surnames.add(familyName)
-//                                Log.i(TAG, "ContactsContractHelper: familyName = $familyName")
-//                            }
-//                        }
+                        if (cursorFamilyName.count > 0) {
+                            while (cursorFamilyName.moveToNext()) {
+                                val familyName = cursorFamilyName.getString(cursorFamilyName.getColumnIndex(
+                                    ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME))
+                                surnames.add(familyName)
+                                Log.i(ContentValues.TAG, "ContactsContractHelper: familyName = $familyName")
+                                val givenName = cursorFamilyName.getString(cursorFamilyName.getColumnIndex(
+                                    ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME))
+                                names.add(givenName)
+                                Log.i(ContentValues.TAG, "ContactsContractHelper: givenName = $givenName")
+                            }
+                        }
                         cursorFamilyName.close()
                     }
                 }
             }
             cursorName.close()
         }
-        val contacts = names.mapIndexed { index, name ->
-            Log.i(TAG, "names.mapIndexed: index = $index key = ${keyList[index]} name = $name surname = ${surnames[index]} number = ${numbers[index]}")
+        Log.i(ContentValues.TAG, "getContactList: idList ${idList.size}")
+        Log.i(ContentValues.TAG, "getContactList: keyList ${keyList.size}")
+        Log.i(ContentValues.TAG, "getContactList: names ${names.size}")
+        Log.i(ContentValues.TAG, "getContactList: surnames ${surnames.size}")
+        Log.i(ContentValues.TAG, "getContactList: numbers ${numbers.size}")
+        Log.i(ContentValues.TAG, "getContactList: emails ${emails.size}")
+        val contacts = idList.mapIndexed { index, id ->
             ContactModel(
                 id = idList[index].toInt(),
                 key = keyList[index],
-                name = name,
+                name = names[index],
                 taskPhoneNumber = numbers[index],
                 email = emails[index],
                 surname = surnames[index],
                 isSelected = false
             )
         }
-        Log.i(TAG, "getContactList: contacts = ${contacts.size}")
         emit(contacts)
     }
 }

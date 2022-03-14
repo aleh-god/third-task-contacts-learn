@@ -32,7 +32,7 @@ class ListViewModel @Inject constructor(
 
     private fun populateUiState() {
         viewModelScope.launch {
-            contractHelper.getTestList()
+            contractHelper.getContactList()
                 .onStart {
                     Log.i(TAG, "ListViewModel: .onStart")
                     _stateUI.value = StateUI(
