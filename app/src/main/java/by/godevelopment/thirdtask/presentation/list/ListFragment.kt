@@ -6,9 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -47,10 +45,10 @@ class ListFragment : Fragment() {
     ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this, viewModelFactor)[ListViewModel::class.java]
-        setupListRv()
         setupToolbar()
         setupButtons()
         setupEvent()
+        setupListRv()
         return binding.root
     }
 
@@ -120,5 +118,4 @@ class ListFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

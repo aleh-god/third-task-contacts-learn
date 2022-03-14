@@ -1,12 +1,16 @@
 package by.godevelopment.thirdtask.presentation.main
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
@@ -61,7 +65,8 @@ class MainFragment : Fragment() {
 
     private fun setupListeners() {
         binding.btnSelect.setOnClickListener {
-            navigateToList()
+            Log.i(TAG, "setupListeners: checkPermission()")
+            checkPermission()
         }
 
         binding.btnShow.setOnClickListener {
@@ -141,7 +146,46 @@ class MainFragment : Fragment() {
         }
     }
 
+    private fun checkPermission() {
+        Log.i(TAG, "checkPermission: start")
+        // CHECK Condition
+        activity?.let { activity ->
+            val check = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
+            if(check != PackageManager.PERMISSION_GRANTED) {
+                Log.i(TAG, "checkPermission:  Request permission")
+                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_CONTACTS), 100)
+                navigateToList()
+            } else {
+                Log.i(TAG, "checkPermission: navigateToList()")
+                navigateToList()
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 100 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "onRequestPermissionsResult: navigateToList()")
+            navigateToList()
+        } else {
+            Log.i(TAG, "onRequestPermissionsResult: checkPermission()")
+            Snackbar
+                .make(
+                    binding.root,
+                    getString(R.string.fragment_list_alert_perm_denied),
+                    Snackbar.LENGTH_LONG
+                )
+                .show()
+            checkPermission()
+        }
+    }
+
     private fun navigateToList() {
+        Log.i(TAG, "navigateToList: ")
         parentFragmentManager.commit {
             setReorderingAllowed(true)
             replace<ListFragment>(R.id.fragment_container_view)

@@ -3,17 +3,22 @@ package by.godevelopment.thirdtask.presentation.list
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.godevelopment.thirdtask.R
+import by.godevelopment.thirdtask.common.INIT_BOOLEAN_PERMISSION
 import by.godevelopment.thirdtask.common.TAG
 import by.godevelopment.thirdtask.domain.helpers.ContactsContractHelper
+import by.godevelopment.thirdtask.domain.helpers.StringHelper
 import by.godevelopment.thirdtask.domain.models.ContactModel
 import by.godevelopment.thirdtask.domain.usecase.InsertContactUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ListViewModel @Inject constructor(
     private val contractHelper: ContactsContractHelper,
-    private val insertContactUseCase: InsertContactUseCase
+    private val insertContactUseCase: InsertContactUseCase,
+    private val stringHelper: StringHelper
 ): ViewModel() {
     private val _stateUI = MutableStateFlow(StateUI())
     val stateUI: StateFlow<StateUI> = _stateUI
@@ -22,35 +27,39 @@ class ListViewModel @Inject constructor(
     val eventUI: SharedFlow<EventUI> = _eventUI
 
     init {
-        Log.i(TAG, "ListViewModel: init")
-        viewModelScope.launch {
-            populateUiState()
-        }
+        populateUiState()
     }
 
-    private suspend fun populateUiState() {
-        contractHelper.getTestList()
-            .onStart {
-                _stateUI.value = StateUI(
-                    isFetchingData = true
-                )
-            }
-            .catch { exception ->
-                _stateUI.value = StateUI(
-                    isFetchingData = false
-                )
-                _eventUI.emit(
-                    EventUI(
-                        exception.message ?: "Unknown error"
+    private fun populateUiState() {
+        viewModelScope.launch {
+            contractHelper.getTestList()
+                .onStart {
+                    Log.i(TAG, "ListViewModel: .onStart")
+                    _stateUI.value = StateUI(
+                        isFetchingData = true
                     )
-                )
-            }
-            .collect {
-                _stateUI.value = StateUI(
-                    isFetchingData = false,
-                    contacts = it
-                )
-            }
+                }
+                .catch { exception ->
+                    Log.i(TAG, "ListViewModel: .catch = ${exception.message}")
+                    _stateUI.value = StateUI(
+                        isFetchingData = false
+                    )
+                    delay(1000)
+                    _eventUI.emit(
+                        EventUI(
+                            exception.message
+                                ?: stringHelper.getString(R.string.alert_text_error_unknown)
+                        )
+                    )
+                }
+                .collect {
+                    Log.i(TAG, "ListViewModel: size = ${it.size}")
+                    _stateUI.value = StateUI(
+                        isFetchingData = false,
+                        contacts = it
+                    )
+                }
+        }
     }
 
     fun saveContactModel(contactModel: ContactModel) {
@@ -58,11 +67,11 @@ class ListViewModel @Inject constructor(
             val logResult = insertContactUseCase(contactModel)
             if (logResult) {
                 _eventUI.emit(EventUI(
-                    "Contact saved successful."
+                    stringHelper.getString(R.string.fragment_list_message_good)
                 ))
             } else {
                 _eventUI.emit(EventUI(
-                    "Contact don't saved."
+                    stringHelper.getString(R.string.fragment_list_message_bad)
                 ))
             }
         }

@@ -26,6 +26,7 @@ class ContactsRepositoryImp @Inject constructor(
     private fun convertFromModelToEntity(contactModel: ContactModel): ContactEntity {
         return ContactEntity(
             id = contactModel.id,
+            key = contactModel.key,
             taskPhoneNumber = contactModel.taskPhoneNumber,
             name = contactModel.name,
             surname = contactModel.surname,

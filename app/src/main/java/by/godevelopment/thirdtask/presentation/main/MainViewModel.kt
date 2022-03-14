@@ -42,15 +42,11 @@ class MainViewModel @Inject constructor(
         return sharedPreferencesHelper.getCurrentPhoneNumber()
     }
 
-    fun showNotification(message: String) {
-        notificationHelper.createNotification(message)
-    }
-
     fun showNameAndSurnameByNumber() {
         viewModelScope.launch {
             try {
                 val key = sharedPreferencesHelper.getCurrentPhoneNumber()
-                showNotification(getNameAndSurnameByNumberUseCase(key))
+                notificationHelper.createNotification(getNameAndSurnameByNumberUseCase(key))
             } catch (e: Exception) {
                 _eventUI.emit(
                     EventUI(e.message ?: stringHelper.getString(R.string.alert_text_error_unknown))

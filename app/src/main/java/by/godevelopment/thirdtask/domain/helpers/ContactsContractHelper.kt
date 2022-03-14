@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.provider.ContactsContract
+import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.util.Log
 import by.godevelopment.thirdtask.common.TAG
 import by.godevelopment.thirdtask.domain.models.ContactModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
+
 
 class ContactsContractHelper @Inject constructor(
     private val context: Context
@@ -22,8 +24,9 @@ class ContactsContractHelper @Inject constructor(
         val list = (0..10).map {
             ContactModel(
                 id = it,
+                key = it.toString(),
                 name = "name $it",
-                taskPhoneNumber = "Numbe $it",
+                taskPhoneNumber = "Number $it",
                 email = "email $it",
                 surname = "surname $it",
                 isSelected = false
@@ -34,26 +37,36 @@ class ContactsContractHelper @Inject constructor(
 
     @SuppressLint("Range")
     fun getContactList(): Flow<List<ContactModel>> = flow {
-        Log.i(TAG, "ContactsContractHelper: getContactList")
+        val idList = mutableListOf<String>()
+        val keyList = mutableListOf<String>()
         val names = mutableListOf<String>()
+        val surnames = mutableListOf<String>()
         val numbers = mutableListOf<String>()
         val emails = mutableListOf<String>()
-        // init uri
+
         val uri: Uri = ContactsContract.Contacts.CONTENT_URI
-        // Sort
         val sortQuery= ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
-        // init cursor
-        val cursorNameOrNull = context.contentResolver.query(uri, null, null, null, sortQuery)
-        // check condition
+        val cursorNameOrNull = context.contentResolver.query(
+            uri,
+            null,
+            null,
+            null,
+            sortQuery
+        )
+
         cursorNameOrNull?.let { cursorName ->
-            Log.i(TAG, "ContactsContractHelper: cursorName = ${cursorName.count}")
+
             if(cursorName.count > 0) {
                 while (cursorName.moveToNext()) {
                     val id = cursorName.getString(cursorName.getColumnIndex(ContactsContract.Contacts._ID))
-
+                    idList.add(id)
+                    Log.i(TAG, "ContactsContractHelper: id = $id")
+                    val key = cursorName.getString(cursorName.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY))
+                    keyList.add(key)
+                    Log.i(TAG, "ContactsContractHelper: key = $key")
                     val name = cursorName.getString(cursorName.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
                     names.add(name)
-                    Log.i(TAG, "getContactList: name = $name")
+                    Log.i(TAG, "ContactsContractHelper: name = $name")
 
                     val uriEmail =  ContactsContract.CommonDataKinds.Email.CONTENT_URI
                     val selectionEmailQuery = ContactsContract.CommonDataKinds.Email.CONTACT_ID + " =?"
@@ -71,7 +84,7 @@ class ContactsContractHelper @Inject constructor(
                                     ContactsContract.CommonDataKinds.Email.DATA
                                 ))
                                 emails.add(email)
-                                Log.i(TAG, "getContactList: email = $email")
+                                Log.i(TAG, "ContactsContractHelper: email = $email")
                             }
                         }
                         cursorEmail.close()
@@ -92,25 +105,50 @@ class ContactsContractHelper @Inject constructor(
                                 val number = cursorPhone.getString(cursorPhone.getColumnIndex(
                                     ContactsContract.CommonDataKinds.Phone.NUMBER))
                                 numbers.add(number)
-                                Log.i(TAG, "getContactList: number = $number")
+                                Log.i(TAG, "ContactsContractHelper: number = $number")
                             }
                         }
                         cursorPhone.close()
+                    }
+
+                    val uriFamilyName = ContactsContract.Data.CONTENT_URI
+                    val selectionFamilyNameQuery = ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID + " =?"
+                    val cursorFamilyNameOrNull = context.contentResolver.query(
+                        uriFamilyName,
+                        null,
+                        selectionFamilyNameQuery,
+                        arrayOf<String>(id),
+                        null
+                    )
+                    cursorFamilyNameOrNull?.let { cursorFamilyName ->
+                        Log.i(TAG, "getContactList: cursorFamilyName = ${cursorFamilyName.count}")
+//                        if (cursorFamilyName.count > 0) {
+//                            while (cursorFamilyName.moveToNext()) {
+//                                val familyName = cursorFamilyName.getString(cursorFamilyName.getColumnIndex(
+//                                    ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME))
+//                                surnames.add(familyName)
+//                                Log.i(TAG, "ContactsContractHelper: familyName = $familyName")
+//                            }
+//                        }
+                        cursorFamilyName.close()
                     }
                 }
             }
             cursorName.close()
         }
         val contacts = names.mapIndexed { index, name ->
+            Log.i(TAG, "names.mapIndexed: index = $index key = ${keyList[index]} name = $name surname = ${surnames[index]} number = ${numbers[index]}")
             ContactModel(
-                id = 0,
+                id = idList[index].toInt(),
+                key = keyList[index],
                 name = name,
                 taskPhoneNumber = numbers[index],
                 email = emails[index],
-                surname = "",
+                surname = surnames[index],
                 isSelected = false
             )
         }
+        Log.i(TAG, "getContactList: contacts = ${contacts.size}")
         emit(contacts)
     }
 }

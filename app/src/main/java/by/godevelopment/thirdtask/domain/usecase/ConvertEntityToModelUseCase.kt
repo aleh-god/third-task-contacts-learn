@@ -21,6 +21,7 @@ class ConvertEntityToModelUseCase @Inject constructor(
     private fun convertFromEntityToModel(contactEntity: ContactEntity): ContactModel {
         return ContactModel(
             id = contactEntity.id,
+            key = contactEntity.key,
             taskPhoneNumber = contactEntity.taskPhoneNumber,
             name = contactEntity.name,
             surname = contactEntity.surname,
