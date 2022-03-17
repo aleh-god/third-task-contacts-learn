@@ -9,7 +9,12 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="anakiwa">#A2D2FF</color>
-    <color name="orange_white">#FEF9EF</color>
-    <color name="salmon">#FF865E</color>
-    <color name="bright_sun">#FEE440</color>
+    <color name="onOrange">#FEF9EF</color>
+    <color name="primarySalmon">#FF865E</color>
+    <color name="primaryLightSalmon">#fe9801</color>
+    <color name="primaryDarkSalmon">#c56900</color>
+
+    <color name="brightSun">#FEE440</color>
+    <color name="primaryLightBrightSun">#ffc947</color>
+
 </resources>

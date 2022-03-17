@@ -12,7 +12,7 @@ class ConvertEntityToArrayListUseCase @Inject constructor(
         .map {  list ->
             ArrayList(
                 list.map {
-                    "[${it.id} ${it.name} ${it.surname} ${it.taskPhoneNumber} ${it.email}]"
+                    "${it.id} ${it.name} ${it.surname}\n${it.taskPhoneNumber} ${it.email}\n"
                 }
             )
         }

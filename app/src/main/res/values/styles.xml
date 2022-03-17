@@ -8,14 +8,12 @@
     </style>
 
     <style name="ListLayout">
-        <item name="android:orientation">vertical</item>
-        <item name="android:gravity">top</item>
+        <item name="android:background">@color/brightSun</item>
     </style>
 
     <style name="ListItemLayout">
-        <item name="android:orientation">horizontal</item>
+        <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">?attr/colorSecondary</item>
     </style>
 
     <style name="Widget.ThirdTask.Button" parent="Widget.MaterialComponents.Button">

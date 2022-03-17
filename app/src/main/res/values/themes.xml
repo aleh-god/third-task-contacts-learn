@@ -2,12 +2,12 @@
     <!-- Base application theme. -->
     <style name="Theme.ThirdTask" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/salmon</item>
-        <item name="colorPrimaryVariant">@color/bright_sun</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/primarySalmon</item>
+        <item name="colorPrimaryVariant">@color/primaryDarkSalmon</item>
+        <item name="colorOnPrimary">@color/onOrange</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/anakiwa</item>
-        <item name="colorSecondaryVariant">@color/orange_white</item>
+        <item name="colorSecondary">@color/primaryLightBrightSun</item>
+        <item name="colorSecondaryVariant">@color/brightSun</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>

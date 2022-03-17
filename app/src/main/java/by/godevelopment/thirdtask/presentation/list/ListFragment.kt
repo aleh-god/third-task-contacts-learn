@@ -57,8 +57,12 @@ class ListFragment : Fragment() {
             viewModel.stateUI.collect { state ->
                 Log.i(TAG, "ListFragment setupUI: size = ${state.contacts.size}")
                 context?.let {
-                    val colorMain = AppCompatResources.getColorStateList(it, R.color.anakiwa).defaultColor
-                    val colorMark = AppCompatResources.getColorStateList(it, R.color.salmon).defaultColor
+                    val colorMain = AppCompatResources
+                        .getColorStateList(it, R.color.primaryLightBrightSun)
+                        .defaultColor
+                    val colorMark = AppCompatResources
+                        .getColorStateList(it, R.color.primarySalmon)
+                        .defaultColor
                     adapter = ListAdapter(colorMain, colorMark)
                     adapter.listItems = state.contacts
                     binding.rvView.adapter = adapter
