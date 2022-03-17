@@ -9,4 +9,4 @@
 5. Notification  
 6. Styles
 
-<img alt="TransitionsDemo" src="https://github.com/aleh-god/third-task-contacts-learn/blob/master/ContactsDemo.gif" />
+<img alt="ContactsDemo" src="https://github.com/aleh-god/third-task-contacts-learn/blob/dev/ContactsDemo.gif" />
