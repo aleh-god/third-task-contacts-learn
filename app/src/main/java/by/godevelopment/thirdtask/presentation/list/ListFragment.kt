@@ -53,20 +53,21 @@ class ListFragment : Fragment() {
     }
 
     private fun setupListRv() {
+        context?.let {
+            val colorMain = AppCompatResources
+                .getColorStateList(it, R.color.primaryLightBrightSun)
+                .defaultColor
+            val colorMark = AppCompatResources
+                .getColorStateList(it, R.color.primarySalmon)
+                .defaultColor
+            adapter = ListAdapter(colorMain, colorMark)
+
+            binding.rvView.adapter = adapter
+        }
         lifecycleScope.launchWhenStarted {
             viewModel.stateUI.collect { state ->
                 Log.i(TAG, "ListFragment setupUI: size = ${state.contacts.size}")
-                context?.let {
-                    val colorMain = AppCompatResources
-                        .getColorStateList(it, R.color.primaryLightBrightSun)
-                        .defaultColor
-                    val colorMark = AppCompatResources
-                        .getColorStateList(it, R.color.primarySalmon)
-                        .defaultColor
-                    adapter = ListAdapter(colorMain, colorMark)
-                    adapter.listItems = state.contacts
-                    binding.rvView.adapter = adapter
-                }
+                adapter.listItems = state.contacts
             }
         }
     }
